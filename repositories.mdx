@@ -1,0 +1,151 @@
+---
+title: Repository Management
+description: Comprehensive guide to managing GitHub repositories with Sendoh Cheung API
+---
+
+## Repository Management Overview
+
+The Sendoh Cheung API provides powerful tools for managing GitHub repositories programmatically. This guide covers creating, updating, and organizing repositories, along with best practices for repository administration. Whether you're building CI/CD pipelines, developer tools, or repository management applications, our API offers comprehensive functionality for all your repository needs.
+
+## Creating Repositories
+
+Creating repositories is straightforward with the Sendoh Cheung API. You can specify repository properties, set up initial configurations, and establish access controls during creation.
+
+<Steps>
+  <Step title="Prepare Repository Data" icon="settings">
+    Define repository name, description, visibility, and other properties.
+  </Step>
+  <Step title="Set Access Controls" icon="shield">
+    Configure repository permissions and team access levels.
+  </Step>
+  <Step title="Create Repository" icon="plus">
+    Make the API call to create the repository with specified settings.
+  </Step>
+  <Step title="Initialize Content" icon="file-text">
+    Add initial files, README, and project structure as needed.
+  </Step>
+</Steps>
+
+<CodeGroup tabs="JavaScript,cURL">
+  ```javascript
+const repositoryData = {
+  name: 'my-new-repo',
+  description: 'A sample repository',
+  private: false,
+  auto_init: true
+};
+
+const response = await fetch('/api/repositories', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${apiKey}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(repositoryData)
+});
+const repo = await response.json();
+  ```
+  ```bash
+curl -X POST '/api/repositories' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "my-new-repo",
+    "description": "A sample repository",
+    "private": false,
+    "auto_init": true
+  }'
+  ```
+</CodeGroup>
+
+## Repository Properties
+
+Understanding repository properties helps you configure repositories effectively for different use cases and team structures.
+
+<Tabs>
+  <Tab title="Basic Settings" icon="settings">
+    Configure name, description, visibility, and basic repository information.
+  </Tab>
+  <Tab title="Access Control" icon="users">
+    Manage collaborators, teams, and permission levels.
+  </Tab>
+  <Tab title="Branch Protection" icon="git-branch">
+    Set up branch protection rules and merge requirements.
+  </Tab>
+</Tabs>
+
+<Expandable title="Advanced Configuration" default-open="false">
+  For advanced repository management, consider implementing webhooks for automated workflows, setting up custom merge strategies, and configuring repository templates.
+</Expandable>
+
+## Listing and Searching Repositories
+
+The API provides flexible options for listing and searching repositories based on various criteria.
+
+<Columns cols={2}>
+  <Card title="List Repositories" icon="list" href="#list">
+    Retrieve repositories for a user or organization with pagination support.
+  </Card>
+  <Card title="Search Repositories" icon="search" href="#search">
+    Find repositories using advanced search filters and query parameters.
+  </Card>
+</Columns>
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `type` | string | Filter by repository type (all, owner, member) |
+| `sort` | string | Sort results by created, updated, pushed, or full_name |
+| `direction` | string | Sort direction (asc or desc) |
+| `per_page` | integer | Number of results per page (max 100) |
+
+<Callout kind="tip">
+  Use pagination parameters to efficiently retrieve large numbers of repositories.
+</Callout>
+
+## Repository Updates
+
+Keep your repositories current with programmatic updates for metadata, settings, and configurations.
+
+<ExpandableGroup>
+  <Expandable title="Updating Repository Details" default-open="true">
+    Modify repository name, description, homepage URL, and other basic information.
+  </Expandable>
+  <Expandable title="Managing Topics" default-open="false">
+    Add or remove topic tags to help with repository discovery and categorization.
+  </Expandable>
+  <Expandable title="Transferring Ownership" default-open="false">
+    Transfer repository ownership to another user or organization when needed.
+  </Expandable>
+</ExpandableGroup>
+
+## Best Practices
+
+Following repository management best practices ensures maintainable, secure, and well-organized codebases.
+
+- Use descriptive repository names and detailed descriptions
+- Implement appropriate access controls and permission levels
+- Set up branch protection rules for critical branches
+- Regularly archive or delete unused repositories
+- Use repository templates for consistent project structure
+
+<Callout kind="info">
+  Regular repository maintenance helps improve team productivity and code quality.
+</Callout>
+
+## Troubleshooting
+
+Common repository management issues and solutions:
+
+<Expandable title="Permission Denied" default-open="false">
+  Check your authentication token scopes and ensure you have the necessary permissions for the operation.
+</Expandable>
+
+<Expandable title="Repository Not Found" default-open="false">
+  Verify the repository name and ensure it exists. Check for typos in the repository identifier.
+</Expandable>
+
+<Expandable title="Rate Limit Exceeded" default-open="false">
+  Implement proper rate limiting and consider using conditional requests to reduce API calls.
+</Expandable>
+
+For more detailed API information, refer to the API reference section of this documentation.

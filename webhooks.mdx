@@ -1,0 +1,176 @@
+---
+title: Webhooks
+description: Guide to setting up and managing webhooks for real-time repository events
+---
+
+## Webhooks Overview
+
+Webhooks enable real-time notifications for repository events, allowing you to build responsive integrations and automated workflows. Sendoh Cheung provides comprehensive webhook support for GitHub repositories, delivering event data to your configured endpoints as events occur. This guide covers webhook configuration, event types, and best practices for reliable webhook handling.
+
+## Setting Up Webhooks
+
+Creating webhooks is essential for building event-driven applications that respond to repository changes.
+
+<Steps>
+  <Step title="Define Endpoint" icon="link">
+    Create an HTTPS endpoint that can receive and process webhook payloads.
+  </Step>
+  <Step title="Choose Events" icon="bell">
+    Select which repository events you want to receive notifications for.
+  </Step>
+  <Step title="Configure Security" icon="shield">
+    Set up webhook secrets for payload verification and secure transmission.
+  </Step>
+  <Step title="Register Webhook" icon="plus">
+    Create the webhook through the API with your configuration.
+  </Step>
+  <Step title="Test Integration" icon="check">
+    Send test events to verify your endpoint receives and processes payloads correctly.
+  </Step>
+</Steps>
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+const webhookConfig = {
+  name: 'web',
+  active: true,
+  events: ['push', 'pull_request'],
+  config: {
+    url: 'https://your-app.com/webhook',
+    content_type: 'json',
+    secret: 'your-webhook-secret'
+  }
+};
+
+const response = await fetch(`/api/repositories/${repoId}/hooks`, {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${apiKey}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(webhookConfig)
+});
+const webhook = await response.json();
+  ```
+  ```python
+import requests
+
+webhook_config = {
+    'name': 'web',
+    'active': True,
+    'events': ['push', 'pull_request'],
+    'config': {
+        'url': 'https://your-app.com/webhook',
+        'content_type': 'json',
+        'secret': 'your-webhook-secret'
+    }
+}
+
+response = requests.post(
+    f'/api/repositories/{repo_id}/hooks',
+    headers={'Authorization': f'Bearer {api_key}'},
+    json=webhook_config
+)
+webhook = response.json()
+  ```
+</CodeGroup>
+
+## Supported Events
+
+Sendoh Cheung supports a wide range of repository events to cover various use cases and integration scenarios.
+
+<Tabs>
+  <Tab title="Repository Events" icon="folder">
+    Events related to repository creation, deletion, and metadata changes.
+  </Tab>
+  <Tab title="Code Events" icon="git-branch">
+    Events for pushes, commits, branches, and pull requests.
+  </Tab>
+  <Tab title="Issue Events" icon="message-square">
+    Events for issues, comments, and project management.
+  </Tab>
+  <Tab title="Release Events" icon="tag">
+    Events for releases, tags, and deployment activities.
+  </Tab>
+</Tabs>
+
+<Expandable title="Event Payloads" default-open="false">
+  Each event type delivers a specific payload structure with relevant data. Refer to the API documentation for detailed payload schemas.
+</Expandable>
+
+## Security and Verification
+
+Webhook security is crucial for protecting your integrations from unauthorized access and malicious payloads.
+
+<Columns cols={2}>
+  <Card title="Payload Verification" icon="lock" href="#verification">
+    Verify webhook payloads using HMAC signatures to ensure authenticity.
+  </Card>
+  <Card title="SSL Verification" icon="shield" href="#ssl">
+    Ensure webhooks are delivered over secure HTTPS connections.
+  </Card>
+</Columns>
+
+<Callout kind="danger">
+  Always verify webhook signatures to prevent processing of spoofed or malicious payloads.
+</Callout>
+
+## Handling Webhooks
+
+Proper webhook handling ensures reliable processing of events and prevents data loss or processing errors.
+
+<ExpandableGroup>
+  <Expandable title="Idempotency" default-open="true">
+    Implement idempotent processing to handle duplicate webhook deliveries gracefully.
+  </Expandable>
+  <Expandable title="Error Handling" default-open="false">
+    Set up proper error handling and retry mechanisms for failed webhook processing.
+  </Expandable>
+  <Expandable title="Rate Limiting" default-open="false">
+    Implement rate limiting to prevent overwhelming your application with webhook events.
+  </Expandable>
+</ExpandableGroup>
+
+## Managing Webhooks
+
+The API provides tools for listing, updating, and removing webhooks as your needs change.
+
+| Operation | Description |
+|-----------|-------------|
+| `GET /hooks` | List all webhooks for a repository |
+| `PATCH /hooks/{id}` | Update webhook configuration |
+| `DELETE /hooks/{id}` | Remove a webhook |
+| `POST /hooks/{id}/test` | Send a test event to the webhook |
+
+<Callout kind="tip">
+  Regularly review and update your webhooks to ensure they remain active and configured correctly.
+</Callout>
+
+## Best Practices
+
+Following webhook best practices helps ensure reliable, secure, and efficient event processing.
+
+- Use HTTPS endpoints for all webhook URLs
+- Implement proper error handling and logging
+- Verify payload signatures for security
+- Handle duplicate events gracefully
+- Monitor webhook delivery and response times
+- Keep webhook endpoints lightweight and responsive
+
+## Troubleshooting
+
+Common webhook issues and their solutions:
+
+<Expandable title="Webhook Not Delivering" default-open="false">
+  Check your endpoint URL, ensure it's publicly accessible, and verify webhook is active.
+</Expandable>
+
+<Expandable title="Signature Verification Failing" default-open="false">
+  Ensure you're using the correct webhook secret and HMAC algorithm for signature verification.
+</Expandable>
+
+<Expandable title="Payload Processing Errors" default-open="false">
+  Validate your payload parsing logic and handle unexpected data structures gracefully.
+</Expandable>
+
+For additional webhook configuration options and advanced features, consult the API reference documentation.
